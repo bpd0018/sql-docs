@@ -78,13 +78,24 @@ jdbc:sqlserver://;servername=server_name;integratedSecurity=true;authenticationS
  `jdbc:sqlserver://localhost;instanceName=instance1;integratedSecurity=true;<more properties as required>;`  
   
 ## Escaping values in the connection URL  
- You might have to escape certain parts of the connection URL values because of the inclusion of special characters such as spaces, semicolons, and quotation marks. The JDBC driver supports escaping these characters if they are enclosed in braces. For example, {;} escapes a semicolon.  
+ You might have to escape certain parts of the connection URL values because of the inclusion of special characters such as spaces, semicolons, and quotation marks. The JDBC driver supports escaping these characters if they are enclosed in braces. For example, {;} escapes a semicolon.
   
  Escaped values can contain special characters (especially '=', ';', '[]', and space) but cannot contain braces. Values that must be escaped and contain braces should be added to a properties collection.  
   
 > [!NOTE]  
 >  White space inside the braces is literal and not trimmed.  
-  
+
+ Java itself also has escaping rules for strings in source code. In particular, you must escape the backslash character between serverName and instanceName in the URL.
+ 
+ For example:
+ 
+ `jdbc:sqlserver://localhost\SQLEXPRESS`
+ 
+ becomes
+ 
+  `Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost\\SQLEXPRESS", "user", "password");`
+ 
+
 ##  <a name="Connectingintegrated"></a> Connecting with integrated authentication On Windows  
  The JDBC driver supports the use of Type 2 integrated authentication on Windows operating systems through the integratedSecurity connection string property. To use integrated authentication, copy the mssql-jdbc_auth-\<version>-\<arch>.dll file to a directory on the Windows system path on the computer where the JDBC driver is installed.  
   
@@ -106,7 +117,7 @@ jdbc:sqlserver://;servername=server_name;integratedSecurity=true;authenticationS
   
  **To use the serverName property**  
   
- `jdbc:sqlserver://;serverName=3ffe:8311:eeee:f70f:0:5eae:10.203.31.9\\instance1;integratedSecurity=true;`  
+ `jdbc:sqlserver://;serverName=3ffe:8311:eeee:f70f:0:5eae:10.203.31.9\instance1;integratedSecurity=true;`  
   
  **To use the properties collection**  
   
